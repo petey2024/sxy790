@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>邮件发送</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>向指定邮箱发送邮件（tips:用qq邮箱哦）</h2>
+    <body style="background-color: lightblue;"></body>
+    <form id="emailForm">
+        <label for="email">收件人邮箱:</label>
+        <input type="email" id="email" name="email" required placeholder="输入收件人邮箱">
+
+        <label for="subject">邮件主题:</label>
+        <input type="text" id="subject" name="subject" required placeholder="输入邮件主题">
+
+        <label for="message">邮件内容:</label>
+        <textarea id="message" name="message" required placeholder="输入邮件内容" rows="6"></textarea>
+
+        <button type="submit">发送邮件</button>
+    </form>
+
+    <script>
+        const form = document.getElementById('emailForm');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // 阻止表单默认提交行为
+
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+
+            const formData = {
+                email: email,
+                subject: subject,
+                message: message
+            };
+
+            fetch('/send-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('邮件发送失败，请检查网络并确认已创建 Node.js 服务器');
+            });
+        });
+    </script>
+
+</body>
+</html>
